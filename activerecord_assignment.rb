@@ -18,13 +18,14 @@ Track.sum(:milliseconds)
 
 # 3a) Find the highest price of any track that has the media type "MPEG audio file".
 MediaType.where(name: "MPEG audio file")
-# => #<MediaType id: 1, name: "MPEG audio file", created_at: "2006-11-24 08:21:33", updated_at: "2014-01-29 22:14:22">
-Track.where(media_type_id: 1).maximum(:unit_price)
-# => #<BigDecimal:1564428,'0.99E0',9(18)>
+# => MediaType id: 1, name: "MPEG audio file"
+Track.where(media_type_id: 1).maximum(:unit_price).to_f
+# => 0.99
 
 
 # 3b) Find the name of the most expensive track that has the media type "MPEG audio file".
-
+Track.select(:name).where(media_type_id:1).order(unit_price: :desc).first
+# => => #<Track id: nil, name: "Put The Finger On You">
 
 
 # 4) Find the 2 oldest artists.
@@ -35,4 +36,4 @@ Artist.order(:created_at).limit(2)
 
 
 # 1) Find all the albums whose titles start with B.
-Album.find_by_sql("SELECT * FROM albums WHERE title LIKE 'B%'")
+Album.all.where('title LIKE ?', 'B%')
